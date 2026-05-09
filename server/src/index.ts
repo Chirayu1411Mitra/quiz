@@ -15,8 +15,6 @@ import setupSocketHandlers from './socket/handlers.js'
 
 dotenv.config()
 
-const ALLOWED_ORIGIN = process.env.CLIENT_URL || 'http://localhost:5173'
-
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
