@@ -21,7 +21,7 @@ const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
-    origin: ALLOWED_ORIGIN,
+    origin: '*',
     methods: ['GET', 'POST'],
   },
   transports: ['websocket', 'polling'],
@@ -30,7 +30,7 @@ const io = new Server(httpServer, {
 const prisma = new PrismaClient()
 
 // Middleware
-app.use(cors({ origin: ALLOWED_ORIGIN }))
+app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
