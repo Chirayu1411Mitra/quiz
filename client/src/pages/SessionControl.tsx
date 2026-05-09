@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
-import { Play, Lock, Eye, Flag, QrCode, Share2, Copy, BarChart } from 'lucide-react'
+import { Play, Lock, Eye, Flag, Share2, Copy, BarChart } from 'lucide-react'
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { QRCodeCanvas } from 'qrcode.react'
 

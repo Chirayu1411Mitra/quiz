@@ -139,12 +139,6 @@ export default function ParticipantQuestion() {
     )
   }
 
-  const colorMap: Record<number, string> = {
-    0: 'bg-red-500 hover:bg-red-600',
-    1: 'bg-blue-500 hover:bg-blue-600',
-    2: 'bg-yellow-500 hover:bg-yellow-600',
-    3: 'bg-green-500 hover:bg-green-600',
-  }
 
   const options = Array.isArray(question.options) ? question.options : []
   const timerColor = timeLeft > 10 ? 'text-indigo-600' : timeLeft > 5 ? 'text-amber-500' : 'text-rose-500'
