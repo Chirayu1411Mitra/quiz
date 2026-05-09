@@ -356,7 +356,7 @@ export default function setupSocketHandlers(io: Server, prisma: PrismaClient) {
         })
 
         const leaderboard = {
-          topParticipants: participants.map((p) => ({
+          topParticipants: participants.map((p: any) => ({
             id: p.id,
             nickname: p.nickname,
             score: p.score,
@@ -390,7 +390,7 @@ export default function setupSocketHandlers(io: Server, prisma: PrismaClient) {
         })
 
         const payload = {
-          finalLeaderboard: participants.map((p) => ({
+          finalLeaderboard: participants.map((p: any) => ({
             id: p.id,
             nickname: p.nickname,
             score: p.score,
