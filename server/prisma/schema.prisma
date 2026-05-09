@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id    String @id @default(cuid())
+  email String @unique
+  password String
+  name  String
+  quizzes Quiz[]
+  createdAt DateTime @default(now())
+}
+
+model Quiz {
+  id String @id @default(cuid())
+  title String
+  description String?
+  adminId String
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  questions Question[]
+  sessions Session[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id String @id @default(cuid())
+  quizId String
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  text String
+  type String // Changed from enum QuestionType
+  options String? // Changed from Json?
+  timeLimit Int @default(30)
+  points Int @default(100)
+  order Int
+  mediaUrl String?
+  responses Response[]
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id String @id @default(cuid())
+  quizId String
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  roomCode String @unique
+  status String @default("WAITING") // Changed from enum SessionStatus
+  currentQuestionIdx Int @default(0)
+  participants Participant[]
+  responses Response[]
+  startedAt DateTime?
+  endedAt DateTime?
+  createdAt DateTime @default(now())
+}
+
+model Participant {
+  id String @id @default(cuid())
+  sessionId String
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  nickname String
+  score Int @default(0)
+  socketId String?
+  responses Response[]
+  joinedAt DateTime @default(now())
+}
+
+model Response {
+  id String @id @default(cuid())
+  sessionId String
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  participantId String
+  questionId String
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  participant Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  answer String
+  isCorrect Boolean?
+  pointsEarned Int @default(0)
+  answeredAt DateTime @default(now())
+}

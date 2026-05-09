@@ -1,0 +1,19 @@
+{
+  "name": "quizlive",
+  "version": "1.0.0",
+  "description": "Real-time interactive quiz platform",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npx concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w client && npm run build -w server",
+    "start": "npm start -w server",
+    "setup": "npm install && npm run setup -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
