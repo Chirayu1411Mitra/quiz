@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 
 const router = Router()
@@ -23,7 +23,8 @@ router.get('/:roomCode', async (req: any, res: Response) => {
     })
 
     if (!session) {
-      return res.status(404).json({ message: 'Session not found' })
+      res.status(404).json({ message: 'Session not found' })
+      return
     }
 
     const roomState = (await import('../socket/state.js')).rooms.get(req.params.roomCode.toUpperCase())
@@ -65,7 +66,8 @@ router.get('/:roomCode/results', async (req: any, res: Response) => {
     })
 
     if (!session) {
-      return res.status(404).json({ message: 'Session not found' })
+      res.status(404).json({ message: 'Session not found' })
+      return
     }
 
     res.json({

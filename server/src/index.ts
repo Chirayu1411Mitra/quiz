@@ -35,7 +35,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Make io and prisma available to routes
-app.use((req: any, res: any, next: NextFunction) => {
+app.use((req: any, _res: any, next: NextFunction) => {
   req.io = io
   req.prisma = prisma
   next()
@@ -47,7 +47,7 @@ app.use('/api/quizzes', quizRoutes)
 app.use('/api/sessions', sessionRoutes)
 
 // Health check
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' })
 })
 
@@ -55,7 +55,7 @@ app.get('/health', (req: Request, res: Response) => {
 setupSocketHandlers(io, prisma)
 
 // Error handling
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err)
   res.status(err.status || 500).json({
     message: err.message || 'Internal server error',

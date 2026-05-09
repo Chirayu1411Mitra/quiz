@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
 import { verifyToken } from './auth.js'
@@ -21,9 +21,9 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
       },
     })
 
-    const formattedQuizzes = quizzes.map(q => ({
+    const formattedQuizzes = quizzes.map((q: any) => ({
       ...q,
-      questions: q.questions.map(question => ({
+      questions: q.questions.map((question: any) => ({
         ...question,
         options: typeof question.options === 'string' ? JSON.parse(question.options) : question.options
       }))
@@ -50,12 +50,13 @@ router.get('/:id', verifyToken, async (req: any, res: Response) => {
     })
 
     if (!quiz || quiz.adminId !== req.adminId) {
-      return res.status(404).json({ message: 'Quiz not found' })
+      res.status(404).json({ message: 'Quiz not found' })
+      return
     }
 
     const formattedQuiz = {
       ...quiz,
-      questions: quiz.questions.map(q => ({
+      questions: quiz.questions.map((q: any) => ({
         ...q,
         options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
       }))
@@ -89,7 +90,8 @@ router.post('/', verifyToken, async (req: any, res: Response) => {
     res.status(201).json(quiz)
   } catch (err: any) {
     if (err instanceof z.ZodError) {
-      return res.status(400).json({ message: 'Validation error' })
+      res.status(400).json({ message: 'Validation error' })
+      return
     }
     console.error(err)
     res.status(500).json({ message: 'Failed to create quiz' })
@@ -112,7 +114,8 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
     })
 
     if (!quiz || quiz.adminId !== req.adminId) {
-      return res.status(404).json({ message: 'Quiz not found' })
+      res.status(404).json({ message: 'Quiz not found' })
+      return
     }
 
     const updated = await prisma.quiz.update({
@@ -126,7 +129,8 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
     res.json(updated)
   } catch (err: any) {
     if (err instanceof z.ZodError) {
-      return res.status(400).json({ message: 'Validation error' })
+      res.status(400).json({ message: 'Validation error' })
+      return
     }
     res.status(500).json({ message: 'Failed to update quiz' })
   }
@@ -142,7 +146,8 @@ router.delete('/:id', verifyToken, async (req: any, res: Response) => {
     })
 
     if (!quiz || quiz.adminId !== req.adminId) {
-      return res.status(404).json({ message: 'Quiz not found' })
+      res.status(404).json({ message: 'Quiz not found' })
+      return
     }
 
     await prisma.quiz.delete({
@@ -174,7 +179,8 @@ router.post('/:id/questions', verifyToken, async (req: any, res: Response) => {
     })
 
     if (!quiz || quiz.adminId !== req.adminId) {
-      return res.status(404).json({ message: 'Quiz not found' })
+      res.status(404).json({ message: 'Quiz not found' })
+      return
     }
 
     // Get next order
@@ -203,7 +209,8 @@ router.post('/:id/questions', verifyToken, async (req: any, res: Response) => {
     res.status(201).json(formattedQuestion)
   } catch (err: any) {
     if (err instanceof z.ZodError) {
-      return res.status(400).json({ message: 'Validation error', errors: err.errors })
+      res.status(400).json({ message: 'Validation error', errors: err.errors })
+      return
     }
     console.error(err)
     res.status(500).json({ message: 'Failed to create question' })
@@ -220,7 +227,8 @@ router.put('/:id/questions/:qid', verifyToken, async (req: any, res: Response) =
     })
 
     if (!quiz || quiz.adminId !== req.adminId) {
-      return res.status(404).json({ message: 'Quiz not found' })
+      res.status(404).json({ message: 'Quiz not found' })
+      return
     }
 
     // Whitelist only fields that are safe to update
@@ -260,7 +268,8 @@ router.delete('/:id/questions/:qid', verifyToken, async (req: any, res: Response
     })
 
     if (!quiz || quiz.adminId !== req.adminId) {
-      return res.status(404).json({ message: 'Quiz not found' })
+      res.status(404).json({ message: 'Quiz not found' })
+      return
     }
 
     await prisma.question.delete({

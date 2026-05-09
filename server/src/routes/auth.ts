@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -12,7 +12,8 @@ export const verifyToken = (req: any, res: Response, next: any) => {
   const token = req.headers.authorization?.split(' ')[1]
 
   if (!token) {
-    return res.status(401).json({ message: 'No token provided' })
+    res.status(401).json({ message: 'No token provided' })
+    return
   }
 
   try {
